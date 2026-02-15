@@ -8,12 +8,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(allowCredentials = "true")
 public class AuthController {
 
     private final AppConfig appConfig;

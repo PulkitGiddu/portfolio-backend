@@ -17,10 +17,10 @@ public class ServerPortConfig implements WebServerFactoryCustomizer<Configurable
             try {
                 int port = Integer.parseInt(portStr);
                 factory.setPort(port);
-                System.out.println("✅ PORT environment variable detected: " + port);
+                System.out.println("PORT environment variable detected: " + port);
                 System.out.println("==> Server will bind to port: " + port);
             } catch (NumberFormatException e) {
-                System.err.println("❌ Invalid PORT environment variable: " + portStr);
+                System.err.println("Invalid PORT environment variable: " + portStr);
                 System.out.println("==> Defaulting to 8080");
                 factory.setPort(8080);
             }

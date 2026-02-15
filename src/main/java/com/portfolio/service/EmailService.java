@@ -2,9 +2,9 @@ package com.portfolio.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import com.portfolio.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,12 +17,11 @@ public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     private final JavaMailSender mailSender;
+    private final AppConfig appConfig;
 
-    @Value("${app.contact.email}")
-    private String contactEmail;
-
-    public EmailService(JavaMailSender mailSender) {
+    public EmailService(JavaMailSender mailSender, AppConfig appConfig) {
         this.mailSender = mailSender;
+        this.appConfig = appConfig;
     }
 
     /**
@@ -37,7 +36,7 @@ public class EmailService {
             } else {
                 sendSimpleMessage(name, email, message);
             }
-            log.info("Contact notification email sent successfully to: {}", contactEmail);
+            log.info("Contact notification email sent successfully to: {}", appConfig.getContactEmail());
         } catch (Exception e) {
             log.error("Failed to send contact notification email", e);
             // Don't throw exception for async methods as it's lost usually, but logging is
@@ -47,7 +46,7 @@ public class EmailService {
 
     private void sendSimpleMessage(String name, String email, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(contactEmail);
+        mailMessage.setTo(appConfig.getContactEmail());
         mailMessage.setSubject("New Contact Form Submission from " + name);
         mailMessage.setText(buildEmailBody(name, email, message));
         mailMessage.setReplyTo(email);
@@ -59,7 +58,7 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-        helper.setTo(contactEmail);
+        helper.setTo(appConfig.getContactEmail());
         helper.setSubject("New Contact Form Submission from " + name + " (Voice Memo Attached)");
         helper.setText(buildEmailBody(name, email, message));
         helper.setReplyTo(email);

@@ -20,13 +20,12 @@ import java.util.List;
 public class SecurityConfig {
 
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final AppConfig appConfig;
 
-    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler) {
+    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler, AppConfig appConfig) {
         this.successHandler = successHandler;
+        this.appConfig = appConfig;
     }
-
-    @org.springframework.beans.factory.annotation.Value("#{'${app.cors.allowed-origins}'.split(',')}")
-    private List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,7 +48,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(allowedOrigins);
+        configuration.setAllowedOriginPatterns(appConfig.getAllowedOrigins());
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

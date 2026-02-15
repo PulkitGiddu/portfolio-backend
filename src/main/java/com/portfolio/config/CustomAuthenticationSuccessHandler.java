@@ -17,9 +17,7 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final TrackingService trackingService;
-
-    @org.springframework.beans.factory.annotation.Value("${app.frontend.url}")
-    private String frontendUrl;
+    private final AppConfig appConfig;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -32,6 +30,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         trackingService.logAdminAccess(email, ipAddress, "SUCCESS");
 
         // Redirect to home page
-        response.sendRedirect(frontendUrl + "/");
+        response.sendRedirect(appConfig.getFrontendUrl() + "/");
     }
 }

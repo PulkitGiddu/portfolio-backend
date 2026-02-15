@@ -15,7 +15,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = "${app.cors.allowed-origins}")
 public class ContactController {
 
     private final ContactService contactService;

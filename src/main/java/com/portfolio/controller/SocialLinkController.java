@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/social-links")
-@CrossOrigin(origins = "${app.cors.allowed-origins}")
+
 public class SocialLinkController {
 
     private final SocialLinkService service;

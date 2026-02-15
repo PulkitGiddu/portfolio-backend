@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/blogs")
-@CrossOrigin(origins = "${app.cors.allowed-origins}")
+
 public class BlogController {
 
     private static final Logger log = LoggerFactory.getLogger(BlogController.class);

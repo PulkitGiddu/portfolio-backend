@@ -1,8 +1,8 @@
 package com.portfolio.controller;
 
+import com.portfolio.config.AppConfig;
 import com.portfolio.dto.AuthStatusDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "${app.cors.allowed-origins}", allowCredentials = "true")
+@CrossOrigin(allowCredentials = "true")
 public class AuthController {
 
-    @Value("${app.admin.email}")
-    private String adminEmail;
+    private final AppConfig appConfig;
+
+    public AuthController(AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     @GetMapping("/status")
     public AuthStatusDTO getStatus(@AuthenticationPrincipal OAuth2User principal) {
@@ -27,6 +30,7 @@ public class AuthController {
         }
 
         String email = principal.getAttribute("email");
+        String adminEmail = appConfig.getAdminEmail();
         boolean isAdmin = email != null && email.equalsIgnoreCase(adminEmail);
         String name = principal.getAttribute("name");
 

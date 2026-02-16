@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // Log the successful login attempt
         trackingService.logAdminAccess(email, ipAddress, "SUCCESS");
 
-        // Redirect to home page
-        response.sendRedirect(appConfig.getFrontendUrl() + "/");
+        // Redirect to Journal page where admin edit controls are visible
+        response.sendRedirect(appConfig.getFrontendUrl() + "/journal");
     }
 }

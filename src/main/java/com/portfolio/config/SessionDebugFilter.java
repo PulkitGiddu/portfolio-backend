@@ -23,7 +23,7 @@ public class SessionDebugFilter implements Filter {
         String path = httpRequest.getRequestURI();
         HttpSession session = httpRequest.getSession(false);
 
-        log.info("🔍 Session Debug - Path: {}, Session exists: {}, Session ID: {}",
+        log.info("Session Debug - Path: {}, Session exists: {}, Session ID: {}",
                 path,
                 session != null,
                 session != null ? session.getId() : "NONE");
@@ -32,7 +32,7 @@ public class SessionDebugFilter implements Filter {
         if (httpRequest.getCookies() != null) {
             for (var cookie : httpRequest.getCookies()) {
                 if ("JSESSIONID".equals(cookie.getName())) {
-                    log.info("🍪 JSESSIONID Cookie found: {}", cookie.getValue());
+                    log.info("SESSION ID Cookie found: {}", cookie.getValue());
                 }
             }
         } else {

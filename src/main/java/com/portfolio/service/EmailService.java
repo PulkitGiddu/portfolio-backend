@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import com.portfolio.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,9 +20,13 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final AppConfig appConfig;
 
-    public EmailService(JavaMailSender mailSender, AppConfig appConfig) {
+    public EmailService(@Autowired(required = false) JavaMailSender mailSender, AppConfig appConfig) {
         this.mailSender = mailSender;
         this.appConfig = appConfig;
+
+        if (mailSender == null) {
+            log.warn("JavaMailSender is not configured. Email functionality will be disabled.");
+        }
     }
 
     /**
@@ -30,6 +35,11 @@ public class EmailService {
     @Async
     public void sendContactNotification(String name, String email, String message, byte[] voiceMemo,
             String contentType) {
+        if (mailSender == null) {
+            log.warn("Email not sent - JavaMailSender is not configured. Name: {}, Email: {}", name, email);
+            return;
+        }
+
         try {
             if (voiceMemo != null && voiceMemo.length > 0) {
                 sendMimeMessage(name, email, message, voiceMemo, contentType);

@@ -123,53 +123,6 @@ The backend is configured to accept requests from:
 
 Update `app.cors.allowed-origins` in `application.properties` for production domains.
 
-## 📦 Database Schema
-
-### Blogs Table
-```sql
-CREATE TABLE blogs (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE NOT NULL,
-    content TEXT NOT NULL,
-    excerpt TEXT,
-    cover_image VARCHAR(500),
-    tags VARCHAR(255),
-    published BOOLEAN DEFAULT false,
-    read_time INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### Contact Requests Table
-```sql
-CREATE TABLE contact_requests (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## 🧪 Testing the API
-
-### Test Blog Endpoint
-```bash
-curl http://localhost:8081/api/blogs
-```
-
-### Test Contact Form
-```bash
-curl -X POST http://localhost:8081/api/contact \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "message": "Hello! I would like to discuss a project."
-  }'
-```
 
 ## 🚀 Deployment
 

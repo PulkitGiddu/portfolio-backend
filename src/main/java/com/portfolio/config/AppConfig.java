@@ -1,5 +1,7 @@
 package com.portfolio.config;
 
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
@@ -7,26 +9,22 @@ import java.util.List;
 @Component
 public class AppConfig {
 
-    public String getContactEmail() {
-        return getEnv("CONTACT_EMAIL", "pulkitgiddu09@gmail.com");
-    }
+    @Getter
+    @Value("${app.contact.email:pulkitgiddu09@gmail.com}")
+    private String contactEmail;
 
-    public String getAdminEmail() {
-        return getEnv("ADMIN_EMAIL", "pulkitgiddu09@gmail.com");
-    }
+    @Getter
+    @Value("${app.admin.email:pulkitgiddu09@gmail.com}")
+    private String adminEmail;
 
-    public String getFrontendUrl() {
-        return getEnv("FRONTEND_URL", "https://pulkit-portfolio-lemon.vercel.app");
-    }
+    @Getter
+    @Value("${app.frontend.url:https://pulkit-portfolio-lemon.vercel.app}")
+    private String frontendUrl;
+
+    @Value("${app.cors.allowed-origins:https://pulkit-portfolio-lemon.vercel.app,http://localhost:5173,http://localhost:5174}")
+    private String allowedOrigins;
 
     public List<String> getAllowedOrigins() {
-        String origins = getEnv("ALLOWED_ORIGINS",
-                "https://pulkit-portfolio-lemon.vercel.app,http://localhost:5173,http://localhost:5174");
-        return Arrays.asList(origins.split(","));
-    }
-
-    private String getEnv(String key, String defaultValue) {
-        String val = System.getenv(key);
-        return (val != null && !val.isBlank()) ? val : defaultValue;
+        return Arrays.asList(allowedOrigins.split(","));
     }
 }

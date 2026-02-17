@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/tracking/stats").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/tracking/count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/blogs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/tracking/view").permitAll()

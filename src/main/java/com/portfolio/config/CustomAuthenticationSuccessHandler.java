@@ -26,10 +26,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String email = oauthUser.getAttribute("email");
         String ipAddress = request.getRemoteAddr();
 
-        // Log the successful login attempt
         trackingService.logAdminAccess(email, ipAddress, "SUCCESS");
 
-        // Redirect to Journal page where admin edit controls are visible
         response.sendRedirect(appConfig.getFrontendUrl() + "/journal");
     }
 }

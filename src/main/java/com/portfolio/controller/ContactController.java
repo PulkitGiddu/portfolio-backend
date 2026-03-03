@@ -13,9 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/contact")
 public class ContactController {
+
+    private static final Logger log = LoggerFactory.getLogger(ContactController.class);
 
     private final ContactService contactService;
     private final RateLimitingService rateLimit;
@@ -40,6 +45,7 @@ public class ContactController {
         }
 
         try {
+            log.info("Received new contact form submission from: {} ({})", name, email);
             ContactMessage contactMessage = new ContactMessage();
             contactMessage.setSenderName(name);
             contactMessage.setSenderEmail(email);
@@ -51,8 +57,10 @@ public class ContactController {
             }
 
             contactService.saveMessage(contactMessage);
+            log.info("Contact form processed successfully for: {}", email);
             return ResponseEntity.ok("Message sent successfully");
         } catch (IOException e) {
+            log.error("Failed to process attachment for contact form from: {}", email, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process attachment");
         }
     }

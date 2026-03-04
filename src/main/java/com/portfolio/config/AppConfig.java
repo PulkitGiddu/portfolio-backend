@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
@@ -16,6 +18,9 @@ public class AppConfig {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @Getter
     @Value("${app.contact.email:pulkitgiddu09@gmail.com}")
@@ -59,9 +64,27 @@ public class AppConfig {
         log.error("MAIL HOST: '{}'", mailHost);
         log.error("MAIL USER: '{}'", maskValue(mailUser));
 
-        // 4. Check OAuth Configuration (masked)
+        // 4. Check OAuth Configuration (from property)
         String clientId = environment.getProperty("spring.security.oauth2.client.registration.google.client-id");
-        log.error("GOOGLE CLIENT ID: '{}'", maskValue(clientId));
+        log.error("GOOGLE CLIENT ID (property): '{}'", maskValue(clientId));
+        log.error("GOOGLE CLIENT ID LENGTH: {}", clientId != null ? clientId.length() : 0);
+        log.error("GOOGLE CLIENT ID ENDS WITH: '{}'",
+                clientId != null && clientId.length() > 20 ? clientId.substring(clientId.length() - 25) : "TOO_SHORT");
+
+        // 4b. Check ACTUAL bean used by Spring Security
+        try {
+            ClientRegistration googleReg = clientRegistrationRepository.findByRegistrationId("google");
+            if (googleReg != null) {
+                String beanClientId = googleReg.getClientId();
+                log.error("GOOGLE CLIENT ID (from bean): '{}'", maskValue(beanClientId));
+                log.error("BEAN CLIENT ID LENGTH: {}", beanClientId != null ? beanClientId.length() : 0);
+                log.error("IS DUMMY?: {}", "dummy-client-id".equals(beanClientId));
+            } else {
+                log.error("GOOGLE CLIENT REGISTRATION: NOT FOUND IN BEAN");
+            }
+        } catch (Exception e) {
+            log.error("ERROR reading ClientRegistrationRepository: {}", e.getMessage());
+        }
 
         // 5. Check URL Configuration
         log.error("FRONTEND URL: '{}'", frontendUrl);

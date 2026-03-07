@@ -2,12 +2,14 @@ package com.portfolio.config;
 
 import com.portfolio.model.Blog;
 import com.portfolio.repository.BlogRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Configuration
 public class DataInitializer {
 
@@ -28,7 +30,7 @@ public class DataInitializer {
                 sampleBlog.setPublishedAt(LocalDateTime.now());
 
                 blogRepository.save(sampleBlog);
-                System.out.println("Sample blog post created successfully.");
+                log.info("Sample blog post created successfully");
             }
         };
     }

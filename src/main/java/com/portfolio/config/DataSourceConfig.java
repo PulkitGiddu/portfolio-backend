@@ -16,8 +16,6 @@ public class DataSourceConfig {
         String username = System.getenv("DB_USERNAME");
         String password = System.getenv("DB_PASSWORD");
 
-        System.out.println("Configuring DataSource manual: URL present? " + (url != null));
-
         return DataSourceBuilder.create()
                 .url(url)
                 .username(username)
